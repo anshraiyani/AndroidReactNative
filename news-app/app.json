@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "news-app",
+    "slug": "news-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png"
+      },
+      "package": "com.anshraiyani13.newsapp"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "856855de-31fa-4fa1-9591-3c821598bdf8"
+      }
+    },
+    "owner": "anshraiyani13"
+  }
+}
