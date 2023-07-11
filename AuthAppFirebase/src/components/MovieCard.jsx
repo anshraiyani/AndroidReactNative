@@ -19,7 +19,7 @@ const MovieCard = ({item,navigation}) => {
     }
   };
 
-  // console.log(item)
+  const genreArray=item.genre_ids.slice(0,3)
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={()=>navigation.navigate('MovieDetails',{item:item})} >
       <View style={styles.imageContainer}>
@@ -36,7 +36,7 @@ const MovieCard = ({item,navigation}) => {
           {moment(item.release_date).format('Do MMMM YYYY')}
         </Text>
         <View style={styles.genreListContainer}>
-          {item.genre_ids.map(genre => {
+          {genreArray.map(genre => {
             if (genre in genres) {
               return (
                 <View key={genre} style={styles.genreContainer}>
@@ -48,7 +48,7 @@ const MovieCard = ({item,navigation}) => {
         </View>
         <View style={styles.ratingContainer}>
           <Icon name={'thumbs-up-sharp'} size={20} color={getColor()} />
-          <Text style={styles.ratingText}>{item.vote_average}</Text>
+          <Text style={styles.ratingText}>{item.vote_average.toFixed(2)}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontFamily: 'Rubik-Light',
+    color:'black'
   },
   genreContainer: {
     borderWidth: 0.5,
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
   },
   genreText: {
     fontSize: 11,
+    color:'black'
   },
   genreListContainer: {
     marginTop: 5,

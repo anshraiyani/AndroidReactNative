@@ -14,10 +14,11 @@ const SearchNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
+        gestureEnabled: true,
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        gestureEnabled:true
-      }}>
+      }}
+      initialRouteName="SearchMovies">
       <Stack.Screen name="SearchMovies" component={SearchMovies} />
       <Stack.Screen name="MovieCard" component={MovieCard} />
       <Stack.Screen name="MovieDetails" component={MovieDetails} />

@@ -17,7 +17,9 @@ const MovieNavigator = () => {
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         gestureEnabled:true
-      }}>
+      }}
+      initialRouteName='Home'
+      >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="MovieDetails" component={MovieDetails} />
     </Stack.Navigator>

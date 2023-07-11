@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
-  FlatList
+  FlatList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import MovieCard from '../components/MovieCard';
@@ -33,8 +33,8 @@ const SearchMovies = ({navigation}) => {
       let searchQuery = search.split(' ').join('+');
       setQuery(searchQuery);
       getMovies(query);
-    }else{
-        setData(null)
+    } else {
+      setData(null);
     }
   }, [search]);
 
@@ -46,18 +46,21 @@ const SearchMovies = ({navigation}) => {
           style={styles.input}
           onChangeText={text => setSearch(text)}
         />
-        <TouchableOpacity style={styles.btnContainer} onPress={()=>getMovies(query)}>
+        <TouchableOpacity
+          style={styles.btnContainer}
+          onPress={() => getMovies(query)}>
           <Text style={styles.searchText}>Search</Text>
         </TouchableOpacity>
       </View>
       {data ? (
         <View>
-            <FlatList
-                data={data.results}
-                renderItem={({item})=>(
-                    <MovieCard item={item} navigation={navigation} />
-                )} 
-            />
+          <FlatList
+            style={{marginBottom:100}}
+            data={data.results}
+            renderItem={({item}) => (
+              <MovieCard item={item} navigation={navigation} />
+            )}
+          />
         </View>
       ) : (
         <View
@@ -94,6 +97,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.2)',
     fontSize: 18,
     fontFamily: 'Rubik-Regular',
+    backgroundColor: 'white',
+    color: 'black',
   },
   btnContainer: {
     justifyContent: 'center',
@@ -101,6 +106,7 @@ const styles = StyleSheet.create({
     width: '22%',
     backgroundColor: '#8f62bf',
     borderRadius: 10,
+    elevation: 10,
   },
   searchText: {
     fontSize: 15,

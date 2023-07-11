@@ -9,9 +9,11 @@ import {
 import React, {useState, useEffect} from 'react';
 import moment from 'moment';
 import {genres} from '../data/genres';
+import {FlatList} from 'react-native-gesture-handler';
 
 const MovieDetails = ({route}) => {
   const item = route.params['item'];
+
   return (
     <ScrollView style={styles.container}>
       <View style={{height: 370}}>
@@ -61,7 +63,9 @@ const MovieDetails = ({route}) => {
           </View>
         </View>
         <View>
-          <Text style={styles.Title}>Rating: {item.vote_average}</Text>
+          <Text style={styles.Title}>
+            Rating: {item.vote_average.toFixed(2)}
+          </Text>
         </View>
         <View>
           <Text style={styles.Title}>Overview</Text>
@@ -91,8 +95,8 @@ const styles = StyleSheet.create({
   posterContainer: {
     height: 200,
     width: 130,
-    borderColor:'white',
-    borderWidth:.2
+    borderColor: 'white',
+    borderWidth: 0.2,
   },
   poster: {
     height: '100%',
@@ -110,6 +114,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 17,
     fontFamily: 'Rubik-Light',
+    color: 'grey',
   },
   genreMainContainer: {},
   Title: {
@@ -135,5 +140,6 @@ const styles = StyleSheet.create({
   overviewText: {
     fontFamily: 'Rubik-Regular',
     fontSize: 17,
+    color: 'grey',
   },
 });
