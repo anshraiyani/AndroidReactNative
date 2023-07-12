@@ -16,7 +16,7 @@ const Signup = () => {
         firestore()
           .collection('users')
           .doc(uid)
-          .set({favorite: []})
+          .set({favorite: [],watchlist:[]})
           .then(() => {
             Snackbar.show({
               text: 'Account Created Successfully!',

@@ -10,11 +10,18 @@ import {
 import React, {useState, useEffect} from 'react';
 import MovieCard from '../components/MovieCard';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useSelector } from 'react-redux';
+import {selectState } from '../redux/slices/userSlice';
+import auth from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore'
+import { useDispatch } from 'react-redux';
+import { updateFavoriteMovies,updateWatchlist } from '../redux/slices/userSlice';
 
 const Home = ({navigation}) => {
   const [data, setData] = useState(null);
   const [page, setPage] = useState(1);
   const scroll = React.createRef();
+  const dispatch=useDispatch()
 
   const getData = async page => {
     try {
@@ -29,7 +36,21 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     getData(page);
+    const uid=auth().currentUser.uid
+        const firestoreRef=firestore().collection('users').doc(uid)
+        firestoreRef.get().then((doc)=>{
+          if(doc.exists){
+            const data=doc.data()
+            const favoriteMovies=data.favorite||[]
+            const watchListMovies=data.watchlist||[]
+            dispatch(updateFavoriteMovies(favoriteMovies))
+            dispatch(updateWatchlist(watchListMovies))
+          }
+        })
   }, [page]);
+
+  // const state=useSelector(selectState)
+  // console.log(state)
 
   return (
     <View style={styles.container}>

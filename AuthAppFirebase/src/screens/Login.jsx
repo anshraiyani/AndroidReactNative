@@ -3,7 +3,10 @@ import React, {useEffect, useState} from 'react';
 
 import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';
+import firestore from '@react-native-firebase/firestore'
 import {GoogleSignin,statusCodes} from '@react-native-google-signin/google-signin';
+import { useDispatch } from 'react-redux';
+import { updateFavoriteMovies, updateWatchlist } from '../redux/slices/userSlice';
 
 const Login = ({navigation}) => {
   // useEffect(() => {
@@ -16,6 +19,8 @@ const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
 
+  const dispatch=useDispatch()
+
   const handleLogin = () => {
     auth()
       .signInWithEmailAndPassword(email, pass)
@@ -23,6 +28,17 @@ const Login = ({navigation}) => {
         Snackbar.show({
           text: 'Logged in Successfully!',
         });
+        const uid=auth().currentUser.uid
+        const firestoreRef=firestore().collection('users').doc(uid)
+        firestoreRef.get().then((doc)=>{
+          if(doc.exists){
+            const data=doc.data()
+            const favoriteMovies=data.favorite||[]
+            const watchListMovies=data.watchlist||[]
+            dispatch(updateFavoriteMovies(favoriteMovies))
+            dispatch(updateWatchlist(watchListMovies))
+          }
+        })
       })
       .catch(error => {
         console.log(error);

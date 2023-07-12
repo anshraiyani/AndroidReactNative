@@ -1,29 +1,29 @@
 import {View, Text} from 'react-native';
 import React from 'react';
-
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import Home from '../screens/Home';
-import MovieDetails from '../components/MovieDetails';
+import Watchlist from '../screens/Watchlist';
+import WatchlistMovieDetails from '../components/WatchlistMovieDetails';
 
 const Stack = createStackNavigator();
 
-const MovieNavigator = () => {
+const WatchlistNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        gestureEnabled:false
       }}
-      initialRouteName='Home'
-      >
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="MovieDetails" component={MovieDetails} />
+      initialRouteName="Watchlist">
+      <Stack.Screen name="Watchlist" component={Watchlist} />
+      <Stack.Screen
+        name="WatchlistMovieDetails"
+        component={WatchlistMovieDetails}
+      />
     </Stack.Navigator>
   );
 };
 
-export default MovieNavigator;
+export default WatchlistNavigator;

@@ -14,7 +14,7 @@ const SearchNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        gestureEnabled: true,
+        gestureEnabled: false,
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
