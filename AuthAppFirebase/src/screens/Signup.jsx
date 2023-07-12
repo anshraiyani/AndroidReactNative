@@ -3,25 +3,33 @@ import React, {useState} from 'react';
 
 import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';
+import firestore from '@react-native-firebase/firestore';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const handleSignin = () => {
     auth()
-  .createUserWithEmailAndPassword(email, pass)
-  .then(() => {
-    Snackbar.show({
-      text:'Account Created Successfully!',
-      duration:Snackbar.LENGTH_LONG
-    })
-  })
-  .catch(error => {
-    Snackbar.show({
-      text:'Error',
-      duration:Snackbar.LENGTH_LONG
-    })
-  });
+      .createUserWithEmailAndPassword(email, pass)
+      .then(() => {
+        const uid = auth().currentUser.uid;
+        firestore()
+          .collection('users')
+          .doc(uid)
+          .set({favorite: []})
+          .then(() => {
+            Snackbar.show({
+              text: 'Account Created Successfully!',
+              duration: Snackbar.LENGTH_LONG,
+            });
+          });
+      })
+      .catch(error => {
+        Snackbar.show({
+          text: 'Error',
+          duration: Snackbar.LENGTH_LONG,
+        });
+      });
   };
 
   return (

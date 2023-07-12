@@ -5,15 +5,78 @@ import {
   Image,
   ScrollView,
   ImageBackground,
+  Button,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import moment from 'moment';
 import {genres} from '../data/genres';
 import SimilarMovies from './SimilarMovies';
 import Cast from './Cast';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import Snackbar from 'react-native-snackbar';
 
-const MovieDetails = ({route,navigation}) => {
+const MovieDetails = ({route, navigation}) => {
   const item = route.params['item'];
+  const uid = auth().currentUser.uid;
+  const userRef = firestore().collection('users').doc(uid);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    constainsMovie()
+  }, []);
+
+  const constainsMovie=()=>{
+  userRef
+  .get()
+  .then((doc) => {
+    if (doc.exists) {
+      const favoriteMovies = doc.data().favorite;
+      if (favoriteMovies.includes(item.id)) {
+        setIsFavorite(true)
+      } else {
+        setIsFavorite(false)
+      }
+    } else {
+      console.log('User document does not exist');
+    }
+  })
+  .catch((error) => {
+    console.error('Error checking movie ID in favorites:', error);
+  });
+  }
+
+  const handleAddToFavorite = () => {
+    userRef
+      .update({
+        favorite: firestore.FieldValue.arrayUnion(item.id),
+      })
+      .then(() => {
+        Snackbar.show({
+          text: 'Movie Added to Favorites!',
+        });
+        setIsFavorite(true)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    };
+    
+    const handleRemoveFavorite = () => {
+      userRef
+      .update({
+        favorite: firestore.FieldValue.arrayRemove(item.id),
+      })
+      .then(() => {
+        Snackbar.show({
+          text: 'Movie Removed from Favorites!',
+        });
+        setIsFavorite(false)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -77,8 +140,15 @@ const MovieDetails = ({route,navigation}) => {
           <Cast id={item.id} navigation={navigation} />
         </View>
         <View>
+          {!isFavorite ? (
+            <Button title="Add to favorites" onPress={handleAddToFavorite} />
+          ) : (
+            <Button title="Remove from favorites" onPress={handleRemoveFavorite} />
+          )}
+        </View>
+        <View>
           <Text style={styles.Title}>Similar</Text>
-          <SimilarMovies id={item.id} navigation={navigation}/>
+          <SimilarMovies id={item.id} navigation={navigation} />
         </View>
       </View>
     </ScrollView>
