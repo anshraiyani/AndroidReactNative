@@ -34,6 +34,13 @@ const Login = ({navigation}) => {
   const dispatch = useDispatch();
 
   const handleLogin = () => {
+    if (pass === '' || email === '') {
+      Snackbar.show({
+        text: 'All Fields are compulsory',
+        duration: Snackbar.LENGTH_LONG,
+      });
+      return;
+    }
     auth()
       .signInWithEmailAndPassword(email, pass)
       .then(() => {
@@ -53,10 +60,30 @@ const Login = ({navigation}) => {
         });
       })
       .catch(error => {
-        Snackbar.show({
-          text:error,
-          duration:Snackbar.LENGTH_LONG
-        })
+        switch (error.code) {
+          case 'auth/invalid-email': {
+            Snackbar.show({
+              text: 'Invalid Email',
+              duration: Snackbar.LENGTH_LONG,
+            });
+            break;
+          }
+          case 'auth/wrong-password': {
+            Snackbar.show({
+              text: 'Wrong Password',
+              duration: Snackbar.LENGTH_LONG,
+            });
+            break;
+          }
+          case 'auth/user-not-found': {
+            Snackbar.show({
+              text: 'No User exists with this email!',
+              duration: Snackbar.LENGTH_LONG,
+            });
+            break;
+          }
+        }
+        console.log(error);
       });
   };
 
@@ -95,7 +122,10 @@ const Login = ({navigation}) => {
             style={styles.logo}
             source={require('../../assets/images/logo.png')}
           />
-          <Text style={styles.titleText}>MMDB</Text>
+          <View style={{justifyContent:'flex-start',gap:-20}}>
+            <Text style={styles.titleText}>MMDB</Text>
+            <Text style={{fontFamily:'Rubik-Regular',color:'#8f62bf'}}>My Movie Database</Text>
+          </View>
         </View>
         <View style={styles.formContainer}>
           <Text style={styles.loginTitle}>Log in</Text>
@@ -104,6 +134,7 @@ const Login = ({navigation}) => {
             placeholder="Email"
             value={email}
             onChangeText={text => setEmail(text)}
+            placeholderTextColor={'grey'}
           />
           <TextInput
             style={styles.input}
@@ -111,6 +142,7 @@ const Login = ({navigation}) => {
             secureTextEntry={true}
             value={pass}
             onChangeText={text => setPass(text)}
+            placeholderTextColor={'grey'}
           />
           {/* <View style={styles.btnContainer}>
         <Button title="Login" onPress={handleLogin} />
@@ -119,10 +151,14 @@ const Login = ({navigation}) => {
           {/* <Button title="Login with google" onPress={handleGoogleSignin} /> */}
 
           <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.loginContainer} onPress={handleLogin}>
+            <TouchableOpacity
+              style={styles.loginContainer}
+              onPress={handleLogin}>
               <Text style={styles.loginText}>Log In</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.resetContainer}>
+            <TouchableOpacity
+              style={styles.resetContainer}
+              onPress={() => navigation.navigate('ResetPass')}>
               <Text style={styles.resetText}>Forgot Password</Text>
             </TouchableOpacity>
           </View>
@@ -145,8 +181,8 @@ export default Login;
 const styles = StyleSheet.create({
   container: {
     padding: 15,
-    justifyContent:'space-between',
-    height:'100%',
+    justifyContent: 'space-between',
+    height: '100%',
   },
   titleText: {
     fontFamily: 'Rubik-Black',
@@ -158,7 +194,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     justifyContent: 'center',
-    marginVertical: 15,
+    marginVertical: 30,
   },
   loginTitle: {
     fontFamily: 'Rubik-Regular',
@@ -227,8 +263,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#8f62bf',
   },
-  footerContainer:{
-    alignItems:'center',
-    marginBottom:20
+  footerContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
 });
