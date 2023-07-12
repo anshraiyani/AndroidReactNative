@@ -36,8 +36,6 @@ const WatchListCard = ({id, navigation}) => {
     getMovie(id);
   }, [id]);
 
-  console.log(movie);
-
   return (
     <View>
       {movie && (
@@ -90,6 +88,7 @@ const styles = StyleSheet.create({
     height: 160,
     backgroundColor: 'white',
     margin: 10,
+    marginTop:0,
     flexDirection: 'row',
     elevation: 6,
     shadowColor: '#171717',

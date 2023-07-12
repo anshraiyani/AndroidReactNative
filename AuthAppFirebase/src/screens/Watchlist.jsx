@@ -16,14 +16,16 @@ const Watchlist = ({navigation}) => {
       </View>
       <View>
         <FlatList
-            data={watchlater}
-            renderItem={({item})=><WatchListCard id={item} navigation={navigation} />}
+          style={{marginBottom: 120}}
+          data={watchlater}
+          renderItem={({item}) => (
+            <WatchListCard id={item} navigation={navigation} />
+          )}
         />
       </View>
     </View>
   );
 };
-
 
 export default Watchlist;
 
