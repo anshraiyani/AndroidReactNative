@@ -9,9 +9,10 @@ import {
 import React, {useState, useEffect} from 'react';
 import moment from 'moment';
 import {genres} from '../data/genres';
-import {FlatList} from 'react-native-gesture-handler';
+import SimilarMovies from './SimilarMovies';
+import Cast from './Cast';
 
-const MovieDetails = ({route}) => {
+const MovieDetails = ({route,navigation}) => {
   const item = route.params['item'];
 
   return (
@@ -70,6 +71,14 @@ const MovieDetails = ({route}) => {
         <View>
           <Text style={styles.Title}>Overview</Text>
           <Text style={styles.overviewText}>{item.overview}</Text>
+        </View>
+        <View>
+          <Text style={styles.Title}>Cast</Text>
+          <Cast id={item.id} navigation={navigation} />
+        </View>
+        <View>
+          <Text style={styles.Title}>Similar</Text>
+          <SimilarMovies id={item.id} navigation={navigation}/>
         </View>
       </View>
     </ScrollView>
