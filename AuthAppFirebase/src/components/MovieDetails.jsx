@@ -6,6 +6,7 @@ import {
   ScrollView,
   ImageBackground,
   Button,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import moment from 'moment';
@@ -22,6 +23,7 @@ import {
   removeFavoriteMovie,
   removeFromWatchlist,
 } from '../redux/slices/userSlice';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const MovieDetails = ({route, navigation}) => {
   const item = route.params['item'];
@@ -205,25 +207,42 @@ const MovieDetails = ({route, navigation}) => {
           <Text style={styles.Title}>Cast</Text>
           <Cast id={item.id} navigation={navigation} />
         </View>
-        <View>
-          {!isFavorite ? (
-            <Button title="Add to favorites" onPress={handleAddToFavorite} />
-          ) : (
-            <Button
-              title="Remove from favorites"
-              onPress={handleRemoveFavorite}
-            />
-          )}
-        </View>
-        <View>
-          {!isInWatchlist ? (
-            <Button title="Add to watchlist" onPress={handleAddToWatchlist} />
-          ) : (
-            <Button
-              title="Remove from watchlist"
-              onPress={handleRemoveFromWatchList}
-            />
-          )}
+        <View style={{flexDirection:'row',gap:5}}>
+          <View style={{width:'50%'}}>
+            {!isFavorite ? (
+              // <Button title="Add to favorites" onPress={handleAddToFavorite} />
+              <TouchableOpacity
+                style={styles.btnAddFavContainer}
+                onPress={handleAddToFavorite}>
+                <Text style={styles.addFavText}>Add To Favorite</Text>
+                <Icon name={'heart-sharp'} size={26} color={'red'} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.btnRemoveFavContainer}
+                onPress={handleRemoveFavorite}>
+                <Text style={styles.removeFavText}>Remove</Text>
+                <Icon name={'heart-dislike-sharp'} size={26} color={'white'} />
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={{width:'50%'}}> 
+            {!isInWatchlist ? (
+              <TouchableOpacity
+                style={styles.btnAddLaterContainer}
+                onPress={handleAddToWatchlist}>
+                <Text style={styles.addLaterText}>Add To Watchlist</Text>
+                <Icon name={'timer-sharp'} size={26} color={'#8f62bf'} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.btnRemoveLaterContainer}
+                onPress={handleRemoveFromWatchList}>
+                <Text style={styles.removeLaterText}>Remove</Text>
+                <Icon name={'timer-sharp'} size={26} color={'white'} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <View>
           <Text style={styles.Title}>Similar</Text>
@@ -299,5 +318,61 @@ const styles = StyleSheet.create({
     fontFamily: 'Rubik-Regular',
     fontSize: 17,
     color: 'grey',
+  },
+  addFavText: {
+    fontFamily: 'Rubik-Regular',
+    fontSize: 18,
+    color: 'red',
+  },
+  btnAddFavContainer: {
+    flexDirection: 'row',
+    gap: 5,
+    borderWidth: 1,
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderColor: 'red',
+    borderRadius: 20,
+    padding: 5,
+  },
+  removeFavText: {
+    fontFamily: 'Rubik-Regular',
+    fontSize: 18,
+    color: 'white',
+  },
+  btnRemoveFavContainer: {
+    flexDirection: 'row',
+    gap: 5,
+    justifyContent: 'center',
+    backgroundColor: 'red',
+    borderRadius: 20,
+    padding: 5,
+  },
+  addLaterText: {
+    fontFamily: 'Rubik-Regular',
+    fontSize: 18,
+    color: '#8f62bf',
+  },
+  btnAddLaterContainer: {
+    flexDirection: 'row',
+    gap: 5,
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: '#8f62bf',
+  },
+  removeLaterText: {
+    fontFamily: 'Rubik-Regular',
+    fontSize: 18,
+    color: 'white',
+  },
+  btnRemoveLaterContainer: {
+    flexDirection: 'row',
+    gap: 5,
+    justifyContent: 'center',
+    backgroundColor: '#8f62bf',
+    borderRadius: 20,
+    padding: 5,
   },
 });
