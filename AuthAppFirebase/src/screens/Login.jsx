@@ -1,5 +1,4 @@
 import {
-  Button,
   StyleSheet,
   Text,
   TextInput,
@@ -83,7 +82,6 @@ const Login = ({navigation}) => {
             break;
           }
         }
-        console.log(error);
       });
   };
 
@@ -144,10 +142,6 @@ const Login = ({navigation}) => {
             onChangeText={text => setPass(text)}
             placeholderTextColor={'grey'}
           />
-          {/* <View style={styles.btnContainer}>
-        <Button title="Login" onPress={handleLogin} />
-        <Button title="Signup" onPress={() => navigation.navigate('Signup')} />
-      </View> */}
           {/* <Button title="Login with google" onPress={handleGoogleSignin} /> */}
 
           <View style={styles.btnContainer}>
