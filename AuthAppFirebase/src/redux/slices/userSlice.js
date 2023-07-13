@@ -27,11 +27,21 @@ const userSlice = createSlice({
     updateWatchlist: (state, action) => {
       state.watchlistMovies = [...action.payload];
     },
-    
+    clearArrays: state => {
+      state.favoriteMovies = [];
+      state.watchlistMovies = [];
+    },
   },
 });
 
-export const {addFavoriteMovies, removeFavoriteMovie, updateFavoriteMovies,addToWatchlist,removeFromWatchlist,updateWatchlist} =
-  userSlice.actions;
+export const {
+  addFavoriteMovies,
+  removeFavoriteMovie,
+  updateFavoriteMovies,
+  addToWatchlist,
+  removeFromWatchlist,
+  updateWatchlist,
+  clearArrays,
+} = userSlice.actions;
 export const selectState = state => state.user;
 export default userSlice.reducer;
