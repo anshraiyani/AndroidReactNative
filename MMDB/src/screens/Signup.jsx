@@ -48,7 +48,8 @@ const Signup = () => {
           .then(() => {
             Snackbar.show({
               text: 'Account Created Successfully!',
-              duration: Snackbar.LENGTH_LONG,
+              duration: Snackbar.LENGTH_SHORT,
+              marginBottom:50
             });
           });
       })

@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MovieNavigator from './MovieNavigator';
 import SearchNavigator from './SearchNavigator';
 import WatchlistNavigator from './WatchlistNavigator';
+import FavoriteNavigator from './FavoriteNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,6 +26,8 @@ const HomeNavigator = () => {
             iconname = focused ? 'person-sharp' : 'person-outline';
           } else if (route.name === 'WatchlistNavigator') {
             iconname = focused ? 'eye-sharp' : 'eye-outline';
+          } else if (route.name === 'FavoriteNavigator') {
+            iconname = focused ? 'heart-sharp' : 'heart-outline';
           }
           return <Icon name={iconname} size={22} color={color} />;
         },
@@ -45,6 +48,11 @@ const HomeNavigator = () => {
         name="WatchlistNavigator"
         component={WatchlistNavigator}
         options={{title: 'Watchlist'}}
+      />
+      <Tab.Screen
+        name="FavoriteNavigator"
+        component={FavoriteNavigator}
+        options={{title: 'Favorite'}}
       />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>

@@ -45,6 +45,8 @@ const Login = ({navigation}) => {
       .then(() => {
         Snackbar.show({
           text: 'Logged in Successfully!',
+          duration:Snackbar.LENGTH_SHORT,
+          marginBottom:50
         });
         const uid = auth().currentUser.uid;
         const firestoreRef = firestore().collection('users').doc(uid);

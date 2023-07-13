@@ -21,18 +21,18 @@ import {
   removeFavoriteMovie,
   removeFromWatchlist,
 } from '../redux/slices/userSlice';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const MovieDetails = ({route, navigation}) => {
   const movieData = route.params['movie'];
-  const [data,setData] = useState(null)
+  const [data, setData] = useState(null);
   const uid = auth().currentUser.uid;
   const userRef = firestore().collection('users').doc(uid);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const dispatch = useDispatch();
 
-  const getMovie = async (id) => {
+  const getMovie = async id => {
     try {
       const url = `https://api.themoviedb.org/3/movie/${id}?api_key=fc6b0f8734f6d710fed11de93fc496cc`;
       const response = await fetch(url);
@@ -43,9 +43,9 @@ const MovieDetails = ({route, navigation}) => {
     }
   };
 
-  useEffect(()=>{
-    getMovie(movieData.id)
-  },[movieData.id])
+  useEffect(() => {
+    getMovie(movieData.id);
+  }, [movieData.id]);
 
   useEffect(() => {
     constainsFavoriteMovie();
@@ -100,6 +100,8 @@ const MovieDetails = ({route, navigation}) => {
       .then(() => {
         Snackbar.show({
           text: 'Movie Added to Favorites!',
+          duration: Snackbar.LENGTH_SHORT,
+          marginBottom:50
         });
         setIsFavorite(true);
         dispatch(addFavoriteMovies(data.id));
@@ -117,6 +119,8 @@ const MovieDetails = ({route, navigation}) => {
       .then(() => {
         Snackbar.show({
           text: 'Movie Removed from Favorites!',
+          duration: Snackbar.LENGTH_SHORT,
+          marginBottom:50
         });
         setIsFavorite(false);
         dispatch(removeFavoriteMovie(data.id));
@@ -134,6 +138,8 @@ const MovieDetails = ({route, navigation}) => {
       .then(() => {
         Snackbar.show({
           text: 'Movie Added to Watchlist!',
+          duration: Snackbar.LENGTH_SHORT,
+          marginBottom:50
         });
         setIsInWatchlist(true);
         dispatch(addToWatchlist(data.id));
@@ -151,6 +157,8 @@ const MovieDetails = ({route, navigation}) => {
       .then(() => {
         Snackbar.show({
           text: 'Movie Removed from Watchlist!',
+          duration: Snackbar.LENGTH_SHORT,
+          marginBottom:50
         });
         setIsInWatchlist(false);
         dispatch(removeFromWatchlist(data.id));
@@ -161,107 +169,112 @@ const MovieDetails = ({route, navigation}) => {
   };
 
   return (
-      data &&
-    <ScrollView style={styles.container}>
-      <View style={{height: 370}}>
-        <ImageBackground
-          style={styles.bgImage}
-          source={{
-            uri: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
-          }}>
-          <View style={styles.shadow}></View>
-        </ImageBackground>
-        <View
-          style={{
-            position: 'absolute',
-            top: 160,
-            left: 10,
-            flexDirection: 'row',
-          }}>
-          <View style={styles.posterContainer}>
-            <Image
-              style={styles.poster}
-              source={{
-                uri: `https://image.tmdb.org/t/p/original${data.poster_path}`,
-              }}
-            />
+    data && (
+      <ScrollView style={styles.container}>
+        <View style={{height: 370}}>
+          <ImageBackground
+            style={styles.bgImage}
+            source={{
+              uri: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
+            }}>
+            <View style={styles.shadow}></View>
+          </ImageBackground>
+          <View
+            style={{
+              position: 'absolute',
+              top: 160,
+              left: 10,
+              flexDirection: 'row',
+            }}>
+            <View style={styles.posterContainer}>
+              <Image
+                style={styles.poster}
+                source={{
+                  uri: `https://image.tmdb.org/t/p/original${data.poster_path}`,
+                }}
+              />
+            </View>
+            <View style={{width: '100%'}}>
+              <Text style={styles.titleText}>{data.title}</Text>
+              <Text style={styles.date}>
+                {moment(data.release_date).format('Do MMMM YYYY')}
+              </Text>
+            </View>
           </View>
-          <View style={{width: '100%'}}>
-            <Text style={styles.titleText}>{data.title}</Text>
-            <Text style={styles.date}>
-              {moment(data.release_date).format('Do MMMM YYYY')}
+        </View>
+        <View style={{padding: 10, gap: 15}}>
+          <View style={styles.genreMainContainer}>
+            <Text style={styles.Title}>Genres</Text>
+            <View style={{flexDirection: 'row', gap: 15, flexWrap: 'wrap'}}>
+              {data.genres.map(genre => {
+                return (
+                  <View key={genre.id} style={styles.genreContainer}>
+                    <Text style={styles.genreText}>{genre.name}</Text>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+          <View>
+            <Text style={styles.Title}>
+              Rating: {data.vote_average.toFixed(2)}
             </Text>
           </View>
-        </View>
-      </View>
-      <View style={{padding: 10, gap: 15}}>
-        <View style={styles.genreMainContainer}>
-          <Text style={styles.Title}>Genres</Text>
-          <View style={{flexDirection: 'row', gap: 15, flexWrap: 'wrap'}}>
-            {data.genres.map(genre => {
-              return (
-                <View key={genre.id} style={styles.genreContainer}>
-                  <Text style={styles.genreText}>{genre.name}</Text>
-                </View>
-              );
-            })}
+          <View>
+            <Text style={styles.Title}>Overview</Text>
+            <Text style={styles.overviewText}>{data.overview}</Text>
+          </View>
+          <View>
+            <Text style={styles.Title}>Cast</Text>
+            <Cast id={data.id} navigation={navigation} />
+          </View>
+          <View style={{flexDirection: 'row', gap: 5}}>
+            <View style={{width: '50%'}}>
+              {!isFavorite ? (
+                <TouchableOpacity
+                  style={styles.btnAddFavContainer}
+                  onPress={handleAddToFavorite}>
+                  <Text style={styles.addFavText}>Add To Favorite</Text>
+                  <Icon name={'heart-sharp'} size={26} color={'red'} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.btnRemoveFavContainer}
+                  onPress={handleRemoveFavorite}>
+                  <Text style={styles.removeFavText}>Remove</Text>
+                  <Icon
+                    name={'heart-dislike-sharp'}
+                    size={26}
+                    color={'white'}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={{width: '50%'}}>
+              {!isInWatchlist ? (
+                <TouchableOpacity
+                  style={styles.btnAddLaterContainer}
+                  onPress={handleAddToWatchlist}>
+                  <Text style={styles.addLaterText}>Add To Watchlist</Text>
+                  <Icon name={'timer-sharp'} size={26} color={'#8f62bf'} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.btnRemoveLaterContainer}
+                  onPress={handleRemoveFromWatchList}>
+                  <Text style={styles.removeLaterText}>Remove</Text>
+                  <Icon name={'timer-sharp'} size={26} color={'white'} />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+          <View>
+            <Text style={styles.Title}>Similar</Text>
+            <SimilarMovies id={data.id} navigation={navigation} />
           </View>
         </View>
-        <View>
-          <Text style={styles.Title}>
-            Rating: {data.vote_average.toFixed(2)}
-          </Text>
-        </View>
-        <View>
-          <Text style={styles.Title}>Overview</Text>
-          <Text style={styles.overviewText}>{data.overview}</Text>
-        </View>
-        <View>
-          <Text style={styles.Title}>Cast</Text>
-          <Cast id={data.id} navigation={navigation} />
-        </View>
-        <View style={{flexDirection: 'row', gap: 5}}>
-          <View style={{width: '50%'}}>
-            {!isFavorite ? (
-              <TouchableOpacity
-                style={styles.btnAddFavContainer}
-                onPress={handleAddToFavorite}>
-                <Text style={styles.addFavText}>Add To Favorite</Text>
-                <Icon name={'heart-sharp'} size={26} color={'red'} />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.btnRemoveFavContainer}
-                onPress={handleRemoveFavorite}>
-                <Text style={styles.removeFavText}>Remove</Text>
-                <Icon name={'heart-dislike-sharp'} size={26} color={'white'} />
-              </TouchableOpacity>
-            )}
-          </View>
-          <View style={{width: '50%'}}>
-            {!isInWatchlist ? (
-              <TouchableOpacity
-                style={styles.btnAddLaterContainer}
-                onPress={handleAddToWatchlist}>
-                <Text style={styles.addLaterText}>Add To Watchlist</Text>
-                <Icon name={'timer-sharp'} size={26} color={'#8f62bf'} />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.btnRemoveLaterContainer}
-                onPress={handleRemoveFromWatchList}>
-                <Text style={styles.removeLaterText}>Remove</Text>
-                <Icon name={'timer-sharp'} size={26} color={'white'} />
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-        <View>
-          <Text style={styles.Title}>Similar</Text>
-          <SimilarMovies id={data.id} navigation={navigation} />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    )
   );
 };
 
