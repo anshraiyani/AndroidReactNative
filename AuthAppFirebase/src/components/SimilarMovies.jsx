@@ -37,7 +37,7 @@ const SimilarMovies = ({id,navigation}) => {
 
 const SimilarMovieCard = ({item,navigation}) => {
   return (
-    <TouchableOpacity style={styles.cardContainer} onPress={()=>navigation.navigate('MovieDetails',{item:item})}>
+    <TouchableOpacity style={styles.cardContainer} onPress={()=>navigation.push('MovieDetails',{item:item})}>
       <Image
         style={styles.poster}
         source={{uri: `https://image.tmdb.org/t/p/original${item.poster_path}`}}

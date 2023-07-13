@@ -7,6 +7,7 @@ import {
 } from '@react-navigation/stack';
 import Home from '../screens/Home';
 import MovieDetails from '../components/MovieDetails';
+import ActorProfile from '../screens/ActorProfile';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const MovieNavigator = () => {
       >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="MovieDetails" component={MovieDetails} />
+      <Stack.Screen name='ActorProfile' component={ActorProfile} />
     </Stack.Navigator>
   );
 };

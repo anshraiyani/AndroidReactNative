@@ -27,7 +27,7 @@ const Cast = ({id, navigation}) => {
         horizontal={true}
         data={data}
         renderItem={({item}) => (
-            <TouchableOpacity style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={()=>navigation.push('ActorProfile',{id:item.id})}>
                 <Image style={styles.image} source={{uri:`https://image.tmdb.org/t/p/original${item.profile_path}`}} />
                 <Text style={styles.name}>{item.name}</Text>
                 <Text style={styles.character}>{item.character}</Text>
