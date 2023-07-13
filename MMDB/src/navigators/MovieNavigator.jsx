@@ -1,4 +1,3 @@
-import {View, Text} from 'react-native';
 import React from 'react';
 
 import {
@@ -6,8 +5,8 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import Home from '../screens/Home';
-import MovieDetails from '../components/MovieDetails';
 import ActorProfile from '../screens/ActorProfile';
+import MovieDetails from '../components/MovieDetails';
 
 const Stack = createStackNavigator();
 
@@ -22,7 +21,7 @@ const MovieNavigator = () => {
       initialRouteName='Home'
       >
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="MovieDetails" component={MovieDetails} />
+      <Stack.Screen name='MovieDetails' component={MovieDetails} /> 
       <Stack.Screen name='ActorProfile' component={ActorProfile} />
     </Stack.Navigator>
   );

@@ -1,12 +1,11 @@
-import {View, Text} from 'react-native';
 import React from 'react';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import SearchMovies from '../screens/SearchMovies';
-import MovieCard from '../components/MovieCard';
 import MovieDetails from '../components/MovieDetails';
+import ActorProfile from '../screens/ActorProfile';
 
 const Stack = createStackNavigator();
 
@@ -20,8 +19,8 @@ const SearchNavigator = () => {
       }}
       initialRouteName="SearchMovies">
       <Stack.Screen name="SearchMovies" component={SearchMovies} />
-      <Stack.Screen name="MovieCard" component={MovieCard} />
       <Stack.Screen name="MovieDetails" component={MovieDetails} />
+      <Stack.Screen name="ActorProfile" component={ActorProfile} />
     </Stack.Navigator>
   );
 };

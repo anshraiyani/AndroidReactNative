@@ -1,10 +1,8 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import {StyleSheet, Text, View, FlatList} from 'react-native';
+import React from 'react';
 import {useSelector} from 'react-redux';
 import {selectState} from '../redux/slices/userSlice';
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import moment from 'moment';
-import WatchListCard from '../components/WatchlistCard';
+import MovieCard from '../components/MovieCard';
 
 const Watchlist = ({navigation}) => {
   const watchlater = useSelector(selectState).watchlistMovies;
@@ -19,7 +17,7 @@ const Watchlist = ({navigation}) => {
           style={{marginBottom: 120}}
           data={watchlater}
           renderItem={({item}) => (
-            <WatchListCard id={item} navigation={navigation} />
+            <MovieCard id={item} navigation={navigation} />
           )}
         />
       </View>

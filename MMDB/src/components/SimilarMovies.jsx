@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image, ActivityIndicator} from 'react-native';
+import {StyleSheet, View, Image, ActivityIndicator} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -37,7 +37,7 @@ const SimilarMovies = ({id,navigation}) => {
 
 const SimilarMovieCard = ({item,navigation}) => {
   return (
-    <TouchableOpacity style={styles.cardContainer} onPress={()=>navigation.push('MovieDetails',{item:item})}>
+    <TouchableOpacity style={styles.cardContainer} onPress={()=>navigation.push('MovieDetails',{movie:item})}>
       <Image
         style={styles.poster}
         source={{uri: `https://image.tmdb.org/t/p/original${item.poster_path}`}}

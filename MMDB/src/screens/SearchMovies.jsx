@@ -1,11 +1,9 @@
 import {
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  ActivityIndicator,
   FlatList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -58,7 +56,7 @@ const SearchMovies = ({navigation}) => {
             style={{marginBottom:100}}
             data={data.results}
             renderItem={({item}) => (
-              <MovieCard item={item} navigation={navigation} />
+              <MovieCard id={item.id} navigation={navigation} />
             )}
           />
         </View>

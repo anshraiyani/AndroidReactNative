@@ -1,4 +1,3 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {
   CardStyleInterpolators,
@@ -27,5 +26,3 @@ const AuthNavigator = () => {
 };
 
 export default AuthNavigator;
-
-const styles = StyleSheet.create({});

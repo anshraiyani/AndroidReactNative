@@ -5,12 +5,10 @@ import {
   Image,
   ScrollView,
   ImageBackground,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import moment from 'moment';
-import {genres} from '../data/genres';
 import SimilarMovies from './SimilarMovies';
 import Cast from './Cast';
 import auth from '@react-native-firebase/auth';
@@ -23,15 +21,31 @@ import {
   removeFavoriteMovie,
   removeFromWatchlist,
 } from '../redux/slices/userSlice';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons'
 
 const MovieDetails = ({route, navigation}) => {
-  const item = route.params['item'];
+  const movieData = route.params['movie'];
+  const [data,setData] = useState(null)
   const uid = auth().currentUser.uid;
   const userRef = firestore().collection('users').doc(uid);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const dispatch = useDispatch();
+
+  const getMovie = async (id) => {
+    try {
+      const url = `https://api.themoviedb.org/3/movie/${id}?api_key=fc6b0f8734f6d710fed11de93fc496cc`;
+      const response = await fetch(url);
+      const movieData = await response.json();
+      setData(movieData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(()=>{
+    getMovie(movieData.id)
+  },[movieData.id])
 
   useEffect(() => {
     constainsFavoriteMovie();
@@ -44,7 +58,7 @@ const MovieDetails = ({route, navigation}) => {
       .then(doc => {
         if (doc.exists) {
           const favoriteMovies = doc.data().favorite;
-          if (favoriteMovies.includes(item.id)) {
+          if (favoriteMovies.includes(movieData.id)) {
             setIsFavorite(true);
           } else {
             setIsFavorite(false);
@@ -64,7 +78,7 @@ const MovieDetails = ({route, navigation}) => {
       .then(doc => {
         if (doc.exists) {
           const watchlist = doc.data().watchlist;
-          if (watchlist.includes(item.id)) {
+          if (watchlist.includes(movieData.id)) {
             setIsInWatchlist(true);
           } else {
             setIsInWatchlist(false);
@@ -81,14 +95,14 @@ const MovieDetails = ({route, navigation}) => {
   const handleAddToFavorite = () => {
     userRef
       .update({
-        favorite: firestore.FieldValue.arrayUnion(item.id),
+        favorite: firestore.FieldValue.arrayUnion(data.id),
       })
       .then(() => {
         Snackbar.show({
           text: 'Movie Added to Favorites!',
         });
         setIsFavorite(true);
-        dispatch(addFavoriteMovies(item.id));
+        dispatch(addFavoriteMovies(data.id));
       })
       .catch(error => {
         console.log(error);
@@ -98,14 +112,14 @@ const MovieDetails = ({route, navigation}) => {
   const handleRemoveFavorite = () => {
     userRef
       .update({
-        favorite: firestore.FieldValue.arrayRemove(item.id),
+        favorite: firestore.FieldValue.arrayRemove(data.id),
       })
       .then(() => {
         Snackbar.show({
           text: 'Movie Removed from Favorites!',
         });
         setIsFavorite(false);
-        dispatch(removeFavoriteMovie(item.id));
+        dispatch(removeFavoriteMovie(data.id));
       })
       .catch(error => {
         console.log(error);
@@ -115,14 +129,14 @@ const MovieDetails = ({route, navigation}) => {
   const handleAddToWatchlist = () => {
     userRef
       .update({
-        watchlist: firestore.FieldValue.arrayUnion(item.id),
+        watchlist: firestore.FieldValue.arrayUnion(data.id),
       })
       .then(() => {
         Snackbar.show({
           text: 'Movie Added to Watchlist!',
         });
         setIsInWatchlist(true);
-        dispatch(addToWatchlist(item.id));
+        dispatch(addToWatchlist(data.id));
       })
       .catch(error => {
         console.log(error);
@@ -132,14 +146,14 @@ const MovieDetails = ({route, navigation}) => {
   const handleRemoveFromWatchList = () => {
     userRef
       .update({
-        watchlist: firestore.FieldValue.arrayRemove(item.id),
+        watchlist: firestore.FieldValue.arrayRemove(data.id),
       })
       .then(() => {
         Snackbar.show({
           text: 'Movie Removed from Watchlist!',
         });
         setIsInWatchlist(false);
-        dispatch(removeFromWatchlist(item.id));
+        dispatch(removeFromWatchlist(data.id));
       })
       .catch(error => {
         console.log(error);
@@ -147,12 +161,13 @@ const MovieDetails = ({route, navigation}) => {
   };
 
   return (
+      data &&
     <ScrollView style={styles.container}>
       <View style={{height: 370}}>
         <ImageBackground
           style={styles.bgImage}
           source={{
-            uri: `https://image.tmdb.org/t/p/original${item.backdrop_path}`,
+            uri: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
           }}>
           <View style={styles.shadow}></View>
         </ImageBackground>
@@ -167,14 +182,14 @@ const MovieDetails = ({route, navigation}) => {
             <Image
               style={styles.poster}
               source={{
-                uri: `https://image.tmdb.org/t/p/original${item.poster_path}`,
+                uri: `https://image.tmdb.org/t/p/original${data.poster_path}`,
               }}
             />
           </View>
           <View style={{width: '100%'}}>
-            <Text style={styles.titleText}>{item.title}</Text>
+            <Text style={styles.titleText}>{data.title}</Text>
             <Text style={styles.date}>
-              {moment(item.release_date).format('Do MMMM YYYY')}
+              {moment(data.release_date).format('Do MMMM YYYY')}
             </Text>
           </View>
         </View>
@@ -183,34 +198,31 @@ const MovieDetails = ({route, navigation}) => {
         <View style={styles.genreMainContainer}>
           <Text style={styles.Title}>Genres</Text>
           <View style={{flexDirection: 'row', gap: 15, flexWrap: 'wrap'}}>
-            {item.genre_ids.map(genre => {
-              if (genre in genres) {
-                return (
-                  <View key={genre} style={styles.genreContainer}>
-                    <Text style={styles.genreText}>{genres[genre]}</Text>
-                  </View>
-                );
-              }
+            {data.genres.map(genre => {
+              return (
+                <View key={genre.id} style={styles.genreContainer}>
+                  <Text style={styles.genreText}>{genre.name}</Text>
+                </View>
+              );
             })}
           </View>
         </View>
         <View>
           <Text style={styles.Title}>
-            Rating: {item.vote_average.toFixed(2)}
+            Rating: {data.vote_average.toFixed(2)}
           </Text>
         </View>
         <View>
           <Text style={styles.Title}>Overview</Text>
-          <Text style={styles.overviewText}>{item.overview}</Text>
+          <Text style={styles.overviewText}>{data.overview}</Text>
         </View>
         <View>
           <Text style={styles.Title}>Cast</Text>
-          <Cast id={item.id} navigation={navigation} />
+          <Cast id={data.id} navigation={navigation} />
         </View>
-        <View style={{flexDirection:'row',gap:5}}>
-          <View style={{width:'50%'}}>
+        <View style={{flexDirection: 'row', gap: 5}}>
+          <View style={{width: '50%'}}>
             {!isFavorite ? (
-              // <Button title="Add to favorites" onPress={handleAddToFavorite} />
               <TouchableOpacity
                 style={styles.btnAddFavContainer}
                 onPress={handleAddToFavorite}>
@@ -226,7 +238,7 @@ const MovieDetails = ({route, navigation}) => {
               </TouchableOpacity>
             )}
           </View>
-          <View style={{width:'50%'}}> 
+          <View style={{width: '50%'}}>
             {!isInWatchlist ? (
               <TouchableOpacity
                 style={styles.btnAddLaterContainer}
@@ -246,7 +258,7 @@ const MovieDetails = ({route, navigation}) => {
         </View>
         <View>
           <Text style={styles.Title}>Similar</Text>
-          <SimilarMovies id={item.id} navigation={navigation} />
+          <SimilarMovies id={data.id} navigation={navigation} />
         </View>
       </View>
     </ScrollView>

@@ -1,11 +1,11 @@
-import {View, Text} from 'react-native';
 import React from 'react';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import Watchlist from '../screens/Watchlist';
-import WatchlistMovieDetails from '../components/WatchlistMovieDetails';
+import MovieDetails from '../components/MovieDetails';
+import ActorProfile from '../screens/ActorProfile';
 
 const Stack = createStackNavigator();
 
@@ -19,9 +19,10 @@ const WatchlistNavigator = () => {
       initialRouteName="Watchlist">
       <Stack.Screen name="Watchlist" component={Watchlist} />
       <Stack.Screen
-        name="WatchlistMovieDetails"
-        component={WatchlistMovieDetails}
+        name="MovieDetails"
+        component={MovieDetails}
       />
+      <Stack.Screen name="ActorProfile" component={ActorProfile} />
     </Stack.Navigator>
   );
 };

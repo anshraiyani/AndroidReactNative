@@ -2,20 +2,17 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   ActivityIndicator,
   FlatList,
   TouchableOpacity,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import MovieCard from '../components/MovieCard';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useSelector } from 'react-redux';
-import {selectState } from '../redux/slices/userSlice';
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
 import { useDispatch } from 'react-redux';
 import { updateFavoriteMovies,updateWatchlist } from '../redux/slices/userSlice';
+import MovieCard from '../components/MovieCard';
 
 const Home = ({navigation}) => {
   const [data, setData] = useState(null);
@@ -49,9 +46,6 @@ const Home = ({navigation}) => {
         })
   }, [page]);
 
-  // const state=useSelector(selectState)
-  // console.log(state)
-
   return (
     <View style={styles.container}>
       {data ? (
@@ -60,7 +54,7 @@ const Home = ({navigation}) => {
             ref={scroll}
             data={data.results}
             renderItem={({item}) => (
-              <MovieCard item={item} navigation={navigation} />
+              <MovieCard id={item.id} navigation={navigation} />
             )}
             ListHeaderComponent={
               <View style={{flexDirection:'row',gap:10,paddingHorizontal:10}}>
@@ -137,5 +131,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
     justifyContent: 'center',
+    backgroundColor:'white'
   },
 });

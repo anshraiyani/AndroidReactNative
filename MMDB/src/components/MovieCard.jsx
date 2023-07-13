@@ -1,57 +1,81 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, View, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import moment from 'moment';
-import {genres} from '../data/genres';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const MovieCard = ({item,navigation}) => {
+const MovieCard = ({id, navigation}) => {
+  const [movie, setMovie] = useState(null);
+
   const getColor = () => {
-    if (item.vote_average >= 7) {
+    if (movie.vote_average >= 7) {
       return 'green';
     }
-    if (item.vote_average < 7 && item.vote_average >= 5) {
+    if (movie.vote_average < 7 && movie.vote_average >= 5) {
       return 'yellow';
     }
-    if (item.vote_average < 5 && item.vote_average >= 3) {
+    if (movie.vote_average < 5 && movie.vote_average >= 3) {
       return 'orange';
     } else {
       return 'red';
     }
   };
 
-  const genreArray=item.genre_ids.slice(0,3)
+  const getMovie = async (id) => {
+    try {
+      const url = `https://api.themoviedb.org/3/movie/${id}?api_key=fc6b0f8734f6d710fed11de93fc496cc`;
+      const response = await fetch(url);
+      const movieData = await response.json();
+      setMovie(movieData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getMovie(id);
+  }, [id]);
+
   return (
-    <TouchableOpacity style={styles.cardContainer} onPress={()=>navigation.navigate('MovieDetails',{item:item})} >
-      <View style={styles.imageContainer}>
-        <Image
-          source={{
-            uri: `https://image.tmdb.org/t/p/original${item.poster_path}`,
-          }}
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.titleText}>{item.title}</Text>
-        <Text style={styles.date}>
-          {moment(item.release_date).format('Do MMMM YYYY')}
-        </Text>
-        <View style={styles.genreListContainer}>
-          {genreArray.map(genre => {
-            if (genre in genres) {
-              return (
-                <View key={genre} style={styles.genreContainer}>
-                  <Text style={styles.genreText}>{genres[genre]}</Text>
-                </View>
-              );
-            }
-          })}
-        </View>
-        <View style={styles.ratingContainer}>
-          <Icon name={'thumbs-up-sharp'} size={20} color={getColor()} />
-          <Text style={styles.ratingText}>{item.vote_average.toFixed(2)}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+    <View>
+      {movie && (
+        <TouchableOpacity
+          style={styles.cardContainer}
+          onPress={() =>
+            navigation.navigate('MovieDetails', {movie: movie})
+          }>
+          <View style={styles.imageContainer}>
+            <Image
+              source={{
+                uri: `https://image.tmdb.org/t/p/original${movie.poster_path}`,
+              }}
+              style={styles.image}
+            />
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.titleText}>{movie.title}</Text>
+            <Text style={styles.date}>
+              {moment(movie.release_date).format('Do MMMM YYYY')}
+            </Text>
+            <View style={styles.genreListContainer}>
+              {movie.genres.slice(0, 3).map(genre => {
+                return (
+                  <View key={genre.id} style={styles.genreContainer}>
+                    <Text style={styles.genreText}>{genre.name}</Text>
+                  </View>
+                );
+              })}
+            </View>
+            <View style={styles.ratingContainer}>
+              <Icon name={'thumbs-up-sharp'} size={20} color={getColor()} />
+              <Text style={styles.ratingText}>
+                {movie.vote_average.toFixed(2)}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 };
 
@@ -64,6 +88,7 @@ const styles = StyleSheet.create({
     height: 160,
     backgroundColor: 'white',
     margin: 10,
+    marginTop:0,
     flexDirection: 'row',
     elevation: 6,
     shadowColor: '#171717',
@@ -88,7 +113,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontFamily: 'Rubik-Light',
-    color:'black'
+    color: 'black',
   },
   genreContainer: {
     borderWidth: 0.5,
@@ -97,7 +122,7 @@ const styles = StyleSheet.create({
   },
   genreText: {
     fontSize: 11,
-    color:'black'
+    color: 'black',
   },
   genreListContainer: {
     marginTop: 5,
@@ -107,12 +132,12 @@ const styles = StyleSheet.create({
   },
   ratingContainer: {
     flexDirection: 'row',
-    marginTop:5,
+    marginTop: 5,
     gap: 5,
     alignItems: 'center',
   },
-  ratingText:{
-    fontFamily:'Rubik-Light',
-    color:'black'
-  }
+  ratingText: {
+    fontFamily: 'Rubik-Light',
+    color: 'black',
+  },
 });

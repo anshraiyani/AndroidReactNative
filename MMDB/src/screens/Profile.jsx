@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View,TouchableOpacity} from 'react-native';
 import React from 'react';
 import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';

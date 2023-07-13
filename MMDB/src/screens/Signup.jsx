@@ -11,6 +11,7 @@ import React, {useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import Snackbar from 'react-native-snackbar';
 import firestore from '@react-native-firebase/firestore';
+
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
@@ -23,15 +24,13 @@ const Signup = () => {
         duration: Snackbar.LENGTH_LONG,
       });
       return;
-    }
-    else if(pass.length<6){
+    } else if (pass.length < 6) {
       Snackbar.show({
         text: 'Password should be atleast 6 characters long',
         duration: Snackbar.LENGTH_LONG,
       });
       return;
-    }
-    else if (pass !== confirmPass) {
+    } else if (pass !== confirmPass) {
       Snackbar.show({
         text: 'Passwords do not match!',
         duration: Snackbar.LENGTH_LONG,

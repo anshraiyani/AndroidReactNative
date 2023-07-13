@@ -2,7 +2,6 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {
   FlatList,
-  ScrollView,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import moment from 'moment';
@@ -62,7 +61,7 @@ const ActorProfile = ({route, navigation}) => {
               data={actorData.combined_credits.cast.filter(el=>el.poster_path!==null)}
               numColumns={3}
               renderItem={({item}) => (
-                <TouchableOpacity style={styles.posterContainer} onPress={()=>navigation.push('MovieDetails',{item:item})}>
+                <TouchableOpacity style={styles.posterContainer} onPress={()=>navigation.push('MovieDetails',{movie:item})}>
                   <Image
                     style={styles.poster}
                     source={{
