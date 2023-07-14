@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import MovieCard from '../components/MovieCard';
+import Icon from 'react-native-vector-icons/Ionicons'
 
 const SearchMovies = ({navigation}) => {
   const [search, setSearch] = useState(null);
@@ -48,6 +49,12 @@ const SearchMovies = ({navigation}) => {
           style={styles.btnContainer}
           onPress={() => getMovies(query)}>
           <Text style={styles.searchText}>Search</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{alignItems:'center',marginVertical:10}}>
+        <TouchableOpacity style={styles.genreBtn} onPress={()=>navigation.push('SearchGenreNavigator')}>
+          <Text style={styles.genreText}>Search by Genre</Text>
+          <Icon name={'arrow-forward-outline'} color={'white'} size={28} />
         </TouchableOpacity>
       </View>
       {data ? (
@@ -111,4 +118,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Rubik-Regular',
   },
+  genreBtn:{
+    backgroundColor:'#8f62bf',
+    flexDirection:'row',
+    alignItems:'center',
+    width:'45%',
+    justifyContent:'center',
+    padding:10,
+    borderRadius:20
+  },
+  genreText:{
+    color:'white',
+    fontFamily:"Rubik-Regular",
+    fontSize:16
+  }
 });
